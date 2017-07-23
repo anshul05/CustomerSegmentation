@@ -1,12 +1,15 @@
 
+#Clear environment
 rm(list = ls())
 
-getwd()
+#Set working directory
 setwd("/home/anshul/Documents/BA/project")
 
+#Import Dataset
 cc <- read.csv("CC GENERAL.csv", header = T)
-str(cc)
 
+
+#Create function for descriptive analysis
 mystats <- function(x) {
   nmiss<-sum(is.na(x))
   a <- x[!is.na(x)]
@@ -31,7 +34,6 @@ mystats <- function(x) {
   return(c(n=n, nmiss=nmiss, nmiss_per=nmiss_per, outlier_flag=outlier_flag, mean=m, stdev=s,min = min, p1=p1,p5=p5,p10=p10,q1=q1,q2=q2,q3=q3,p90=p90,p95=p95,p99=p99,max=max, UC=UC, LC=LC ))
 }
 
-str(cc)
 var <- sapply(cc, is.numeric)
 
 stats_cc <-t(data.frame(apply(cc[var], 2, mystats)))
@@ -39,8 +41,7 @@ View(stats_cc)
 str(cc)
 
 
-
-
+#Create funciton for outlier treatment
 M1_fun <- function(x){
   quantiles <- quantile( x, c(.01, .99 ),na.rm=TRUE )
   x[ x < quantiles[1] ] <- quantiles[1]
@@ -73,6 +74,8 @@ data1$PAYMENT_TO_MIN_PAYMENT <- data1$PAYMENTS/data1$MINIMUM_PAYMENTS
 hist(data1$PURCHASES_TRX)
 data2 <- replace(data1, is.na(data1), 0)
 
+
+#Factor Analysis
 corrm <- cor(data2)    ###correlation atrix
 
 require(psych)
